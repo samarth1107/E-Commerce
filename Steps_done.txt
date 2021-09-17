@@ -1,0 +1,26 @@
+1.      python -m venv venv
+2.      ./venv/Scripts/activate
+3.      pip install django
+4.      django-admin startproject imart
+5.      cd imart
+6.      python manage.py startapp core
+7.      python manage.py startapp buyer
+8.      python manage.py startapp seller
+9.      python manage.py createsuperuser
+10.     Username : imart, Email : imart@gmail.com, Password : imart12345
+11.     Add config names from app.py of apps in INSTALLED_APPS in setting.py
+12.     python manage.py migrate
+13.     python manage.py makemigrations
+14.     run with python manage.py runserver
+15.     Go to app (core, buyer, seller)
+16.     Create urls.py
+17.     Create folder as template/core {app name}
+18.     Create folder as static
+19.     configure main urls.py with include like path('', include('buyer.urls')),
+20.     put html in template/core folder with static file enclosed in {% static 'file_name' %} name change
+21.     put asset javascipts in static folder
+22.     change main setting STATIC_URL with '/static/'
+23.     add + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) in main urls.py to load static files
+24.     add {% load static %} in main html to load assets files
+25.     {% extends "layout.html" %} in child html page to extend the layout
+26.     use block to edit htmls
