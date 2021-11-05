@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}iMart - Products{% endblock %}
+
+{% block sidebar %}
+    <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-menu-button-wide"></i><span>Category</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    {% for elements in category %}
+                        <li>
+                            <a href="">
+                            <i class="bi bi-circle"></i><span>{{ elements.Name }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+
+    </aside>
+{% endblock %}
+
+
+{% block content %}
+    <div class="pagetitle">
+      <h1>Blank Page</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Pages</li>
+          <li class="breadcrumb-item active">Blank</li>
+        </ol>
+      </nav>
+    </div>
+
+    <section class="section">
+      <div class="row">
+
+        {% for elements in product %}   
+            <div class="product-card">
+                <!-- <div class="badge">Hot</div> -->
+                <div class="product-tumb">
+                    <img src="{{ elements.Product_image.url }}" alt="">
+                </div>
+
+                <div class="product-details">
+                    
+                    <span class="product-catagory">{{ elements.Brand }}</span>
+                    <h4><a href="">{{ elements.Product_title }}</a></h4>
+                    <p>{{ elements.Product_description }}</p>
+
+                    <div class="product-bottom-details">
+                        <div class="product-price">
+                            <small>₹{{ elements.Selling_price }}</small>₹{{ elements.Product_mrp }}
+                        </div>
+                        <div class="product-links">
+                            <a href="#" aria-label="cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        {% empty %}
+        <div class="product-card">
+            <div class="product-details"> 
+                <h4><a href="">No result found</a></h4>
+            </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </section>
+{% endblock %}

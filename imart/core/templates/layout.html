@@ -16,134 +16,259 @@
   <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/icofont/icofont.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/venobox/venobox.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
   <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/simple-datatables/style.css' %}" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.0.7/css/all.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
   <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+
 </head>
 
-<body>
+<body {% if blocksidebar %}class="toggle-sidebar"{% endif %}>
 
   <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top d-flex align-items-center header-transparent">
-    <div class="container d-flex align-items-center">
+  {% if blocknavbar %}
+  {% else %}
+  <header id="header" class="header fixed-top d-flex align-items-center">
 
-      <div class="logo mr-auto">
-        <h1 class="text-light"><a href="index.html"><span>iMart</span></a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-      </div>
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="/" class="logo d-flex align-items-center">
+        <img src="{% static 'assets/img/logo.png' %}" alt="">
+        <span class="d-none d-lg-block">iMart</span>        
+      </a>      
+      {% if blocksidebar %}{% else %}<i class="bi bi-list toggle-sidebar-btn"></i>{% endif %}
+    </div><!-- End Logo -->
 
-      <nav class="nav-menu d-none d-lg-block">
-        <ul>
-          {% block navbar %}          
-          {% endblock %}
-        </ul>
-      </nav><!-- .nav-menu -->
-
+    {% if searchbar %}
+    <div class="search-bar">
+        <form class="search-form d-flex align-items-center">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        </form>
     </div>
-  </header><!-- End Header -->
+    {% else %}
+    {% endif %}
 
-  {% block herosection %}
+    <!-- Icons Navigation -->
+    <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+
+            {% if searchbar %}
+              <li class="nav-item d-block d-lg-none">
+                  <a class="nav-link nav-icon search-bar-toggle " href="#">
+                  <i class="bi bi-search"></i>
+                  </a>
+              </li>
+            {% else %}
+            {% endif %}
+
+            {% if user.is_authenticated %}
+              <!-- Cart Nav -->
+              <li class="nav-item dropdown">
+
+                  <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                  <i class="bi bi-cart"></i>
+                  <span class="badge bg-success badge-number">3</span>
+                  </a><!-- End Messages Icon -->
+
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                  <li class="dropdown-header">
+                      You have 3 new messages
+                      <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                  </li>
+                  <li>
+                      <hr class="dropdown-divider">
+                  </li>
+
+                  <li class="message-item">
+                      <a href="#">
+                      <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                      <div>
+                          <h4>Maria Hudson</h4>
+                          <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                          <p>4 hrs. ago</p>
+                      </div>
+                      </a>
+                  </li>
+                  <li>
+                      <hr class="dropdown-divider">
+                  </li>
+
+                  <li class="message-item">
+                      <a href="#">
+                      <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                      <div>
+                          <h4>Anna Nelson</h4>
+                          <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                          <p>6 hrs. ago</p>
+                      </div>
+                      </a>
+                  </li>
+                  <li>
+                      <hr class="dropdown-divider">
+                  </li>
+
+                  <li class="message-item">
+                      <a href="#">
+                      <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
+                      <div>
+                          <h4>David Muldon</h4>
+                          <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                          <p>8 hrs. ago</p>
+                      </div>
+                      </a>
+                  </li>
+                  <li>
+                      <hr class="dropdown-divider">
+                  </li>
+
+                  <li class="dropdown-footer">
+                      <a href="#">Show all messages</a>
+                  </li>
+
+                  </ul><!-- End Messages Dropdown Items -->
+
+              </li>
+
+              <!-- Profile Nav -->
+              <li class="nav-item dropdown pe-3">                
+                  <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                  <i class="bi bi-person-circle"></i>
+                  <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                  </a><!-- End Profile Iamge Icon -->
+
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                  <li class="dropdown-header">
+                      <h6>Kevin Anderson</h6>
+                      <span>Web Designer</span>
+                  </li>
+                  <li>
+                      <hr class="dropdown-divider">
+                  </li>
+
+                  <li>
+                      <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                      <i class="bi bi-person"></i>
+                      <span>My Profile</span>
+                      </a>
+                  </li>
+                  <li>
+                      <hr class="dropdown-divider">
+                  </li>
+
+                  <li>
+                      <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                      <i class="bi bi-gear"></i>
+                      <span>Account Settings</span>
+                      </a>
+                  </li>
+                  <li>
+                      <hr class="dropdown-divider">
+                  </li>
+
+                  <li>
+                      <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                      <i class="bi bi-question-circle"></i>
+                      <span>Need Help?</span>
+                      </a>
+                  </li>
+                  <li>
+                      <hr class="dropdown-divider">
+                  </li>
+
+                  <li>
+                      <a class="dropdown-item d-flex align-items-center" href="#">
+                      <i class="bi bi-box-arrow-right"></i>
+                      <span>Sign Out</span>
+                      </a>
+                  </li>
+
+                  </ul><!-- End Profile Dropdown Items -->                  
+              </li>
+
+            {% else %}
+              <!-- Profile Nav -->
+              <li class="nav-item dropdown pe-3">
+                  <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                  <i class="bi bi-person-circle"></i>
+                  <span class="d-none d-md-block dropdown-toggle ps-2">Login</span>
+                  </a><!-- End Profile Iamge Icon -->
+      
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">                       
+                  
+                  <li>
+                      <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                      <i class="bi bi-question-circle"></i>
+                      <span>Need Help?</span>
+                      </a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+
+                  <li>
+                      <a class="dropdown-item d-flex align-items-center" href="/signin/">
+                      <i class="bi bi-box-arrow-in-right"></i>
+                      <span>Sign In</span>
+                      </a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li> 
+
+                  </ul><!-- End Profile Dropdown Items -->
+              </li>
+
+            {% endif %}
+
+        </ul>
+    </nav>  
+
+  </header>  
+  {% endif %}
+
+  <!-- ======= Sidebar ======= -->
+  {% block sidebar %}
   {% endblock %}
 
-  <main id="main">
+  <!-- ======= Herosection ======= -->
+  {% block herosection %}
+  {% endblock %}
+    
+  <!-- ======= Main sections ======= -->
+  <main id="main" class="main">
 
     {% block content %}
     {% endblock %}
 
-  </main><!-- End #main -->
+  </main>
 
   <!-- ======= Footer ======= -->
-  <footer id="footer">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
-
-          <div class="col-lg-4 col-md-6">
-            <div class="footer-info">
-              <h3>Bootslander</h3>
-              <p class="pb-3"><em>Qui repudiandae et eum dolores alias sed ea. Qui suscipit veniam excepturi quod.</em></p>
-              <p>
-                A108 Adam Street <br>
-                NY 535022, USA<br><br>
-                <strong>Phone:</strong> +1 5589 55488 55<br>
-                <strong>Email:</strong> info@example.com<br>
-              </p>
-              <div class="social-links mt-3">
-                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-                <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-2 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-2 col-md-6 footer-links">
-            <h4>Our Services</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-4 col-md-6 footer-newsletter">
-            <h4>Our Newsletter</h4>
-            <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
-            <form action="" method="post">
-              <input type="email" name="email"><input type="submit" value="Subscribe">
-            </form>
-
-          </div>
-
-        </div>
-      </div>
+  {% if blockfooter %}
+  {% else %}
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      <strong><span>iMart</span></strong> is for / by / with IIITD
     </div>
+  </footer>  
+  {% endif %}
 
-    <div class="container">
-      <div class="copyright">        
-        Made with &hearts; by <strong><span>IIITD</span></strong>
-      </div>
-    </div>
-  </footer><!-- End Footer -->
-
-  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
-  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
-  <script src="{% static 'assets/vendor/venobox/venobox.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/waypoints/jquery.waypoints.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/counterup/counterup.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.js' %}"></script>
+  <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/tinymce/tinymce.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/simple-datatables/simple-datatables.js' %}"></script>
+  <script src="{% static 'assets/vendor/chart.js/chart.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/echarts/echarts.min.js' %}"></script>  
 
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
