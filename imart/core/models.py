@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class products(models.Model):
@@ -63,3 +64,12 @@ class product_category(models.Model):
     
     def __str__(self):
         return self.Name
+
+class profile(AbstractUser):
+    file = models.FileField(upload_to="image/approval", null=True)
+    is_admin= models.BooleanField('Is admin', default=False)
+    is_customer = models.BooleanField('Is customer', default=False)
+    is_seller = models.BooleanField('Is seller', default=False)
+
+    def __str__(self):
+        return str(self.username)
