@@ -66,7 +66,7 @@ class product_category(models.Model):
         return self.Name
 
 class profile(AbstractUser):
-    file = models.FileField(upload_to="image/approval", null=True)
+    file = models.FileField(upload_to="image/approval", null=True,blank=True)
     is_admin= models.BooleanField('Is admin', default=False)
     is_customer = models.BooleanField('Is customer', default=False)
     is_seller = models.BooleanField('Is seller', default=False)
