@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from .forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm, ProductForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from core.models import profile, products
 
 def login_view(request):
     data = {'blocksidebar': True,
@@ -57,3 +59,69 @@ def signup_view(request):
                 form = SignUpForm()
                 data['form'] = form
                 return render(request, 'seller/signup.html', data)
+
+@login_required(login_url="/seller/")
+def home(request):
+    if(request.user.is_seller==False):
+        return redirect("/seller/")
+    data=products.objects.filter(username=request.user)
+    listing_data={
+        'products':data,
+        'blocksidebar': True,
+        'blockfooter': True,
+        'blocknavbar': True,
+        }
+    return render(request, 'seller/listing.html',listing_data)
+    #return render(request, 'seller/home.html')
+
+@login_required(login_url="/seller/")
+def logout_view(request):
+    if(request.user.is_seller==False):
+        return redirect("/seller/")
+    data = {'blocksidebar': True,
+            'blockfooter': True,
+            'blocknavbar': True}
+    logout(request)
+    return redirect('/seller/', data = data)
+
+def add_product(request):
+    if request.method=='POST':
+        form=ProductForm(request.POST,request.FILES)
+        if form.is_valid():
+            product=form.save(commit=False)
+            product.username=profile.objects.get(username=request.user)
+            #product.Product_id=123
+            product.Listing_status=1
+            product.Avg_rating=0
+            product.save()
+            return redirect('/seller/home/')
+    else:
+        form = ProductForm()
+    return render(request, 'seller/add-product.html',{'form':form} )
+
+def edit_product(request, pk):
+    data=products.objects.filter(username=request.user)
+    product=data.get(pk=pk)
+    if request.method=='POST':
+        form=ProductForm(request.POST,request.FILES)
+        if form.is_valid():
+            instance=form.save(commit=False)
+            instance.Product_id=pk
+            instance.username=profile.objects.get(username=request.user)
+            instance.Listing_status=1
+            instance.Avg_rating=0
+            instance.save()
+            return redirect('/seller/home/')
+    else:
+        form = ProductForm(instance=product)
+    return render(request, 'seller/edit-product.html',{'form':form, 'product': product} )
+
+@login_required(login_url="/seller/")
+def delete_product(request, pk):
+    if(request.user.is_seller==False):
+        return redirect("/seller/")
+    #prod=products.objects.get(pk=pk)
+    data=products.objects.filter(username=request.user)
+    prod=data.get(pk=pk)
+    prod.delete()
+    return redirect("/seller/home/")

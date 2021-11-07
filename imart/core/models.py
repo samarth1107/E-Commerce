@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class products(models.Model):
-    Product_id = models.PositiveIntegerField(primary_key=True)
+    Product_id = models.AutoField(primary_key=True)
     username=models.ForeignKey(to='profile', on_delete=models.CASCADE)
     Product_image = models.ImageField(upload_to="products")
     Product_image_2 = models.ImageField(upload_to="products")

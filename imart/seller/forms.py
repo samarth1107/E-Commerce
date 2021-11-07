@@ -1,5 +1,6 @@
 from django import forms
-from core.models import profile
+from django.forms import ModelForm
+from core.models import profile,product_category,products
 from django.contrib.auth.forms import UserCreationForm
 
 class LoginForm(forms.Form):
@@ -54,3 +55,8 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = profile
         fields = ('username', 'email', 'password1', 'password2', 'is_seller','file')
+
+class ProductForm(ModelForm):
+    class Meta:
+        model=products
+        fields=['Product_title','Brand','Product_mrp','Selling_price','category_id','Product_description','Quantity_available','Country_of_origin','Product_image','Product_image_2']
