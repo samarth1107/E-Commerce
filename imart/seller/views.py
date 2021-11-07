@@ -84,7 +84,13 @@ def logout_view(request):
     logout(request)
     return redirect('/seller/', data = data)
 
+@login_required(login_url="/seller/")
 def add_product(request):
+    if(request.user.is_seller==False):
+        return redirect("/seller/")
+    data = {'blocksidebar': True,
+            'blockfooter': True,
+            'blocknavbar': True}
     if request.method=='POST':
         form=ProductForm(request.POST,request.FILES)
         if form.is_valid():
@@ -97,24 +103,28 @@ def add_product(request):
             return redirect('/seller/home/')
     else:
         form = ProductForm()
-    return render(request, 'seller/add-product.html',{'form':form} )
+        data['form']=form
+    return render(request, 'seller/add-product.html',data )
 
+@login_required(login_url="/seller/")
 def edit_product(request, pk):
-    data=products.objects.filter(username=request.user)
-    product=data.get(pk=pk)
+    if(request.user.is_seller==False):
+        return redirect("/seller/")
+    data = {'blocksidebar': True,
+            'blockfooter': True,
+            'blocknavbar': True}
+    data1=products.objects.filter(username=request.user)
+    product=data1.get(pk=pk)
+    data['product']=product
     if request.method=='POST':
-        form=ProductForm(request.POST,request.FILES)
+        form=ProductForm(request.POST,request.FILES, instance=product)
         if form.is_valid():
-            instance=form.save(commit=False)
-            instance.Product_id=pk
-            instance.username=profile.objects.get(username=request.user)
-            instance.Listing_status=1
-            instance.Avg_rating=0
-            instance.save()
+            form.save()
             return redirect('/seller/home/')
     else:
         form = ProductForm(instance=product)
-    return render(request, 'seller/edit-product.html',{'form':form, 'product': product} )
+        data['form']=form
+    return render(request, 'seller/edit-product.html',data )
 
 @login_required(login_url="/seller/")
 def delete_product(request, pk):
