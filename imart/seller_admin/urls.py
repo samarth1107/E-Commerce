@@ -3,10 +3,11 @@ from . import views
 
 urlpatterns = [
     path('', views.login_view, name="login"),
-    path('home/',views.home,name='home'),
-    path('logout/', views.logout_view, name="logout"),
-    path('approve/<username>/', views.approve, name="approve"),
-    path('disapprove/<username>/', views.disapprove, name="disapprove"),
-    path('listings/<username>/', views.listings, name="listings"),
-    path('deleteProduct/<Product_id>/', views.deleteProduct, name="deleteProduct"),
+    path('sellerAdminhome/',views.home,name='sellerAdminhome'),
+    path('sellerAdminlogout/', views.logout_view, name="sellerAdminlogout"),
+    path('sellerAdminapprove/<username>/', views.approve, name="sellerAdminapprove"),
+    path('sellerAdmindisapprove/<username>/', views.disapprove, name="sellerAdmindisapprove"),
+    path('sellerAdminlistings/<username>/', views.listings, name="sellerAdminlistings"),
+    path('sellerAdmindeleteProduct/<Product_id>/', views.deleteProduct, name="sellerAdmindeleteProduct"),
+    path('sellerAdminchange_password/', views.change_password, name="sellerAdminchange_password"),
 ]

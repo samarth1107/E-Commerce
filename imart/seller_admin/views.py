@@ -2,7 +2,8 @@ from django.shortcuts import render,redirect
 
 from .forms import LoginForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from core.models import profile, products
 from django.db.models import Q 
@@ -14,7 +15,7 @@ def login_view(request):
                 'blocknavbar': True}
 
     if(request.user.is_authenticated and request.user.is_admin):
-        return redirect("/seller_admin/home/")
+        return redirect("/seller_admin/sellerAdminhome/")
 
     if request.method == 'POST':
             form = LoginForm(request.POST)
@@ -26,7 +27,7 @@ def login_view(request):
                 if(user is not None and user.is_admin):         
                     login(request, user)
                     data = {'blocksidebar' : True}
-                    return redirect('/seller_admin/home/', data = data)
+                    return redirect('/seller_admin/sellerAdminhome/', data = data)
                 else:
                     messages.error(request,'Username or Password not Correct')
                     return redirect('/seller_admin/',data=data)
@@ -63,7 +64,30 @@ def approve(request,username):
     prof=profile.objects.get(username=username)
     prof.is_active=True
     prof.save()
-    return redirect("/seller_admin/home/")
+    return redirect("/seller_admin/sellerAdminhome/")
+
+
+@login_required(login_url="/seller_admin/")
+def change_password(request):
+    if(request.user.is_admin==False):
+        return redirect("/seller_admin/")
+    data = {'blocksidebar': True,
+            'blockfooter': True,
+            'blocknavbar': True}
+    
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('/seller_admin/sellerAdminhome/')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    data['form']=form
+    return render(request, 'seller_admin/change_password.html',data)
 
 @login_required(login_url="/seller_admin/")
 def disapprove(request,username):
@@ -72,7 +96,7 @@ def disapprove(request,username):
     prof=profile.objects.get(username=username)
     prof.is_active=False
     prof.save()
-    return redirect("/seller_admin/home/")
+    return redirect("/seller_admin/sellerAdminhome/")
 
 @login_required(login_url="/seller_admin/")
 def deleteProduct(request,Product_id):
@@ -80,7 +104,7 @@ def deleteProduct(request,Product_id):
         return redirect("/seller_admin/")
     prod=products.objects.get(Product_id=Product_id)
     prod.delete()
-    return redirect("/seller_admin/home/")
+    return redirect("/seller_admin/sellerAdminhome/")
 
 @login_required(login_url="/seller_admin/")
 def listings(request,username):

@@ -5,7 +5,8 @@
 
 {% block content %}
 <div class="col-12">
-    <a href="{% url 'logout' %}" class="btn btn-danger w-30"> Log out</a>
+    <a href="{% url 'sellerAdminlogout' %}" class="btn btn-danger w-30"> Log out</a>
+    <a href="{% url 'sellerAdminchange_password' %}" class="btn btn-primary w-30"> Change Password</a>
 </div>
 <h1>Profile for approvals</h1>
 {% for elements in Profile_number %}
@@ -22,7 +23,7 @@
 
         </div>
         <div class="col-12">
-            <a href="{% url 'approve' elements.username %}" class="btn btn-primary w-30"> Approve</a>
+            <a href="{% url 'sellerAdminapprove' elements.username %}" class="btn btn-primary w-30"> Approve</a>
         </div>
     </div>
 {% endfor %}
@@ -41,8 +42,8 @@
 
         </div>
         <div class="col-12">
-            <a href="{% url 'disapprove' elements.username %}" class="btn btn-danger w-30"> Disapprove</a>
-            <a href="{% url 'listings' elements.username %}" class="btn btn-primary w-30"> View Listings</a>
+            <a href="{% url 'sellerAdmindisapprove' elements.username %}" class="btn btn-danger w-30"> Disapprove</a>
+            <a href="{% url 'sellerAdminlistings' elements.username %}" class="btn btn-primary w-30"> View Listings</a>
         </div>
     </div>
     {% endfor %}

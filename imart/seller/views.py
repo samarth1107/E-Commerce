@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import LoginForm, SignUpForm, ProductForm
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from core.models import profile, products
@@ -11,7 +12,7 @@ def login_view(request):
                 'blocknavbar': True}
 
     if(request.user.is_authenticated and request.user.is_admin):
-        return redirect("/seller/home/")
+        return redirect("/seller/Sellerhome/")
 
     if request.method == 'POST':
             form = LoginForm(request.POST)
@@ -22,7 +23,7 @@ def login_view(request):
                 if(user is not None and user.is_seller and user.is_active):         
                     login(request, user)
                     data = {'blocksidebar' : True}
-                    return redirect('/seller/home/', data = data)
+                    return redirect('/seller/Sellerhome/', data = data)
                 else:
                     messages.error(request,'Username or Password not Correct')
                     return redirect('/seller/',data=data)
@@ -85,6 +86,28 @@ def logout_view(request):
     return redirect('/seller/', data = data)
 
 @login_required(login_url="/seller/")
+def change_password(request):
+    if(request.user.is_seller==False):
+        return redirect("/seller/")
+    data = {'blocksidebar': True,
+            'blockfooter': True,
+            'blocknavbar': True}
+    
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('/seller/Sellerhome/')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    data['form']=form
+    return render(request, 'seller/change_password.html',data)
+
+@login_required(login_url="/seller/")
 def add_product(request):
     if(request.user.is_seller==False):
         return redirect("/seller/")
@@ -100,10 +123,10 @@ def add_product(request):
             product.Listing_status=1
             product.Avg_rating=0
             product.save()
-            return redirect('/seller/home/')
+            return redirect('/seller/Sellerhome/')
     else:
         form = ProductForm()
-        data['form']=form
+    data['form']=form
     return render(request, 'seller/add-product.html',data )
 
 @login_required(login_url="/seller/")
@@ -120,10 +143,10 @@ def edit_product(request, pk):
         form=ProductForm(request.POST,request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            return redirect('/seller/home/')
+            return redirect('/seller/Sellerhome/')
     else:
         form = ProductForm(instance=product)
-        data['form']=form
+    data['form']=form
     return render(request, 'seller/edit-product.html',data )
 
 @login_required(login_url="/seller/")
@@ -134,4 +157,4 @@ def delete_product(request, pk):
     data=products.objects.filter(username=request.user)
     prod=data.get(pk=pk)
     prod.delete()
-    return redirect("/seller/home/")
+    return redirect("/seller/Sellerhome/")

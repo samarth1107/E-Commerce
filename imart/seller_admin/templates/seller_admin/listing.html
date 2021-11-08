@@ -5,8 +5,8 @@
 
 {% block content %}
 <div class="col-12">
-    <a href="{% url 'logout' %}" class="btn btn-danger w-30"> Log out</a>
-    <a href="{% url 'home' %}" class="btn btn-primary w-30"> Home</a>
+    <a href="{% url 'sellerAdminlogout' %}" class="btn btn-danger w-30"> Log out</a>
+    <a href="{% url 'sellerAdminhome' %}" class="btn btn-primary w-30"> Home</a>
 </div>
 <h1>Products</h1>
 {% for elements in products %}
@@ -20,6 +20,8 @@
         
         <span class="product-catagory">{{ elements.Brand }}</span>
         <h4>{{ elements.Product_title }}</h4>
+        <h6>{{elements.Country_of_origin}}</h6>
+        <h6>Quantity: {{elements.Quantity_available}}</h6>
         <p>{{ elements.Product_description }}</p>
 
         <div class="product-bottom-details">
@@ -28,7 +30,7 @@
             </div>
         </div>
         <div class="col-12">
-            <a href="{% url 'deleteProduct' elements.Product_id %}" class="btn btn-danger w-30"> Delete</a>
+            <a href="{% url 'sellerAdmindeleteProduct' elements.Product_id %}" class="btn btn-danger w-30"> Delete</a>
         </div>
     </div>
 </div>
