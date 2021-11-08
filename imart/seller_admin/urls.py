@@ -10,4 +10,7 @@ urlpatterns = [
     path('sellerAdminlistings/<username>/', views.listings, name="sellerAdminlistings"),
     path('sellerAdmindeleteProduct/<Product_id>/', views.deleteProduct, name="sellerAdmindeleteProduct"),
     path('sellerAdminchange_password/', views.change_password, name="sellerAdminchange_password"),
+    path('sellerAdminDelete/<username>/', views.delete, name="sellerAdminDelete"),
+    path('sellerAdminseller/', views.seller_view, name="sellerAdminseller"),
+    path('sellerAdminbuyer/', views.buyer_view, name="sellerAdminbuyer"),
 ]

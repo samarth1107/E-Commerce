@@ -46,16 +46,41 @@ def home(request):
     if(request.user.is_admin==False):
         return redirect("/seller_admin/")
     data=profile.objects.filter(Q(is_seller=True) & Q(is_active=False))
-    data2=profile.objects.filter(Q(is_seller=True) & Q(is_active=True))
     approval_data={
         "Profile_number":data,
         'blocksidebar': True,
         'blockfooter': True,
         'blocknavbar': True,
-        "Approved":data2
         }
 
     return render(request, 'seller_admin/home.html',approval_data)
+
+@login_required(login_url="/seller_admin/")
+def seller_view(request):
+    if(request.user.is_admin==False):
+        return redirect("/seller_admin/")
+    data2=profile.objects.filter(Q(is_seller=True) & Q(is_active=True))
+    approval_data={
+        'blocksidebar': True,
+        'blockfooter': True,
+        'blocknavbar': True,
+        "Approved":data2,
+        }
+
+    return render(request, 'seller_admin/seller.html',approval_data)
+
+@login_required(login_url="/seller_admin/")
+def buyer_view(request):
+    if(request.user.is_admin==False):
+        return redirect("/seller_admin/")
+    data3=profile.objects.filter(is_customer=True)
+    approval_data={
+        'blocksidebar': True,
+        'blockfooter': True,
+        'blocknavbar': True,
+        "buyers":data3
+        }
+    return render(request, 'seller_admin/buyer.html',approval_data)
 
 @login_required(login_url="/seller_admin/")
 def approve(request,username):
@@ -104,6 +129,14 @@ def deleteProduct(request,Product_id):
         return redirect("/seller_admin/")
     prod=products.objects.get(Product_id=Product_id)
     prod.delete()
+    return redirect("/seller_admin/sellerAdminhome/")
+
+@login_required(login_url="/seller_admin/")
+def delete(request,username):
+    if(request.user.is_admin==False):
+        return redirect("/seller_admin/")
+    prof=profile.objects.get(username=username)
+    prof.delete()
     return redirect("/seller_admin/sellerAdminhome/")
 
 @login_required(login_url="/seller_admin/")

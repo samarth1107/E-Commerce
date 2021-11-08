@@ -11,14 +11,10 @@
     <a href="{% url 'sellerAdminseller' %}" class="btn btn-primary w-30"> Seller Profiles</a>
     <a href="{% url 'sellerAdminbuyer' %}" class="btn btn-primary w-30">Buyer proflies </a>
 </div>
-<h1>Profile for approvals</h1>
-{% for elements in Profile_number %}
-    <div class="profile-card">
+<h1>Buyer Profiles</h1>
+{% for elements in buyers %}
+<div class="profile-card">
     <!-- <div class="badge">Hot</div> -->
-        <div class="profile-tumb">
-            <embed src="{{ elements.file.url }}" alt="">
-        </div>
-
         <div class="profile-details">
         
             <span>{{ elements.username }}</span>
@@ -26,10 +22,8 @@
 
         </div>
         <div class="col-12">
-            <a href="{% url 'sellerAdminapprove' elements.username %}" class="btn btn-primary w-30"> Approve</a>
             <a href="{% url 'sellerAdminDelete' elements.username %}" class="btn btn-danger w-30"> Delete</a>
         </div>
     </div>
 {% endfor %}
-
 {% endblock %}
