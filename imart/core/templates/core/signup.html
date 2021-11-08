@@ -32,6 +32,20 @@
                         {% csrf_token %}
                         
                         <div class="col-12">
+                            <label for="yourFirstname" class="form-label">First name</label>                            
+                            {{ form.first_name }}
+                            {{ form.errors.first_name }}
+                            <div class="invalid-feedback">Please enter a valid name!</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="yourLastname" class="form-label">Last name</label>                            
+                            {{ form.last_name }}
+                            {{ form.errors.last_name }}
+                            <div class="invalid-feedback">Please enter a valid name!</div>
+                        </div>
+
+                        <div class="col-12">
                             <label for="yourEmail" class="form-label">Your Email</label>                            
                             {{ form.email }}
                             {{ form.errors.email }}

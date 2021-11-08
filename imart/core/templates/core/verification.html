@@ -2,7 +2,7 @@
 {% load static %}
 
 
-{% block title %}iMart - Sign In{% endblock %}
+{% block title %}iMart - Verification{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -24,45 +24,27 @@
                 <div class="card-body">
 
                     <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Login to your account</h5>
-                    <p class="text-center small">Enter your details</p>
+                    <h5 class="card-title text-center pb-0 fs-4">Enter OTP</h5>
                         {% if error_box %}
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 {{ error }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>    
                         {% else %}                      
-                        {% endif %}                        
-                        
+                        {% endif %}  
                     </div>
 
                     <form class="row g-3 needs-validation" novalidate method="post">
                         {% csrf_token %}
                         <div class="col-12">
-                            <label for="yourUsername" class="form-label">Username</label>
-                            <div class="input-group has-validation">
-                            <span class="input-group-text" id="inputGroupPrepend">@</span>
-                            <!-- <input type="text" name="username" class="form-control" id="yourUsername" required> -->
-                            {{ form.username }}
-                            {{ form.errors.username }}
-                            <div class="invalid-feedback">Please choose a username.</div>
-                            </div>
+                            <label for="yourPassword" class="form-label">OTP</label>                            
+                            {{ form.OTP }}
+                            {{ form.errors.OTP }}
+                            <div class="invalid-feedback">Please enter your OTP !!!</div>
                         </div>
 
                         <div class="col-12">
-                            <label for="yourPassword" class="form-label">Password</label>
-                            <!-- <input type="password" name="password" class="form-control" id="yourPassword" required> -->
-                            {{ form.password }}
-                            {{ form.errors.password }}
-                            <div class="invalid-feedback">Please enter your password!</div>
-                        </div>
-
-                        <div class="col-12">
-                            <button class="btn btn-primary w-100" type="submit">Send OTP</button>
-                        </div>
-
-                        <div class="col-12">
-                            <p class="small mb-0">Don't have an account? <a href="/signup/">Sign UP</a></p>
+                            <button class="btn btn-primary w-100" type="submit">Verify</button>
                         </div>
                     </form>
 

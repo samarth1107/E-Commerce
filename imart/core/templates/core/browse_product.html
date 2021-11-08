@@ -21,9 +21,13 @@
                 <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     {% for elements in category %}
                         <li>
-                            <a href="">
+                            <a href="">                                                        
                             <i class="bi bi-circle"></i><span>{{ elements.Name }}</span>
                             </a>
+                                <!-- <form class="search-form d-flex align-items-center">
+                                    <input type="text" name="category">
+                                    <button type="submit" title="Search"><i class="bi bi-search"></i><span>{{ elements.Name }}</span></button>
+                                </form> -->
                         </li>
                     {% endfor %}
                 </ul>
@@ -36,12 +40,11 @@
 
 {% block content %}
     <div class="pagetitle">
-      <h1>Blank Page</h1>
+      <h1>Products</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Pages</li>
-          <li class="breadcrumb-item active">Blank</li>
+          <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Home</a></li>
+          <li class="breadcrumb-item active">Products</li>
         </ol>
       </nav>
     </div>
@@ -51,7 +54,6 @@
 
         {% for elements in product %}   
             <div class="product-card">
-                <!-- <div class="badge">Hot</div> -->
                 <div class="product-tumb">
                     <img src="{{ elements.Product_image.url }}" alt="">
                 </div>
@@ -67,7 +69,7 @@
                             <small>₹{{ elements.Selling_price }}</small>₹{{ elements.Product_mrp }}
                         </div>
                         <div class="product-links">
-                            <a href="#" aria-label="cart"><i class="fas fa-shopping-cart"></i></a>
+                            <a href="{% url 'buyer_add_to_cart' elements.Product_id %}" aria-label="cart"><i class="fas fa-shopping-cart"></i></a>
                         </div>
                     </div>
 
