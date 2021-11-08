@@ -30,10 +30,10 @@ class profile(AbstractUser):
         return str(self.username)
 
 class products(models.Model):
-    Product_id = models.PositiveIntegerField(primary_key=True)
-    Seller_id = models.PositiveIntegerField()
-    Product_image = models.ImageField(upload_to="image/products")
-    Product_image_2 = models.ImageField(upload_to="image/products")
+    Product_id = models.AutoField(primary_key=True)
+    username=models.ForeignKey(to='profile', on_delete=models.CASCADE)
+    Product_id = models.AutoField(primary_key=True)
+    username=models.ForeignKey(to='profile', on_delete=models.CASCADE)
     Product_title  = models.CharField(max_length=100)
     Brand = models.CharField(max_length=50)
     Product_mrp  = models.PositiveIntegerField()

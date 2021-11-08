@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}Admin Homepage{% endblock %}
+
+{% block content %}
+<div class="col-12">
+    <a href="{% url 'sellerAdminlogout' %}" class="btn btn-danger w-30"> Log out</a>
+    <a href="{% url 'sellerAdminchange_password' %}" class="btn btn-primary w-30"> Change Password</a>
+    <a href="{% url 'sellerAdminhome' %}" class="btn btn-primary w-30"> Profile For Approvals</a>
+    <a href="{% url 'sellerAdminseller' %}" class="btn btn-primary w-30"> Seller Profiles</a>
+    <a href="{% url 'sellerAdminbuyer' %}" class="btn btn-primary w-30">Buyer proflies </a>
+</div>
+<h1> Approved Profiles</h1>
+{% for elements in Approved %}
+    <div class="profile-card">
+    <!-- <div class="badge">Hot</div> -->
+        <div class="profile-tumb">
+            <embed src="{{ elements.file.url }}" alt="">
+        </div>
+
+        <div class="profile-details">
+        
+            <span>{{ elements.username }}</span>
+            <h4><a href="">{{ elements.email }}</a></h4>
+
+        </div>
+        <div class="col-12">
+            <a href="{% url 'sellerAdmindisapprove' elements.username %}" class="btn btn-danger w-30"> Disapprove</a>
+            <a href="{% url 'sellerAdminlistings' elements.username %}" class="btn btn-primary w-30"> View Listings</a>
+            <a href="{% url 'sellerAdminDelete' elements.username %}" class="btn btn-danger w-30"> Delete</a>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
