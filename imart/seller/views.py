@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import LoginForm, SignUpForm, ProductForm, SecondStepVerificationForm
+from .forms import LoginForm, SignUpForm, ProductForm, SecondStepVerificationForm,ProfileForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
@@ -82,6 +82,26 @@ def signup_view(request):
                 form = SignUpForm()
                 data['form'] = form
                 return render(request, 'seller/signup.html', data)
+@login_required(login_url="/seller/")
+def sellerProfile(request):
+    if(request.user.is_seller==False):
+        return redirect("/seller/")
+        
+    data = {'blocksidebar': True,
+            'blockfooter': True,
+            'blocknavbar': True}
+    prof=profile.objects.get(username=request.user.username)
+    data['profile']=prof
+    if request.method=='POST':
+        form=ProfileForm(request.POST, instance=prof)
+        if form.is_valid():
+            form.save()
+            return redirect('/seller/Sellerhome/')
+    else:
+        form = ProfileForm(instance=prof)
+    data['form']=form
+    return render(request, 'seller/profile.html',data )
+
 
 @login_required(login_url="/seller/")
 def home(request):

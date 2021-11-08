@@ -1,3 +1,4 @@
+from os import name
 from django.urls import path
 from . import views
 
@@ -10,5 +11,6 @@ urlpatterns = [
     path('Selleredit-product/<int:pk>/', views.edit_product, name='Selleredit_product'),
     path('Sellerdelete_product/<int:pk>', views.delete_product, name="Sellerdelete_product"),
     path('Sellerchange_password/', views.change_password, name="Sellerchange_password"),
-    path('otp_verification/<email>/', views.OTP_verification, name="seller_otp_verification")
+    path('otp_verification/<email>/', views.OTP_verification, name="seller_otp_verification"),
+    path('sellerProfile/',views.sellerProfile,name='sellerProfile')
 ]

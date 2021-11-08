@@ -70,3 +70,9 @@ class SecondStepVerificationForm(forms.Form):
             }
         )
     )
+
+class ProfileForm(ModelForm):
+    
+    class Meta:
+        model = profile
+        fields = ('address_1', 'address_2', 'city', 'state', 'zip_code')
