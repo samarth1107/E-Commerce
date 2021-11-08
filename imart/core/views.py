@@ -126,6 +126,7 @@ def signup_view(request):
                         user = authenticate(username=username, password=password)
                         login(request, user)  
                         send_verficationmail(request)      
+                        
 
                         return redirect('/')
 

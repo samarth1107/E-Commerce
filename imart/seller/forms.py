@@ -60,3 +60,13 @@ class ProductForm(ModelForm):
     class Meta:
         model=products
         fields=['Product_title','Brand','Product_mrp','Selling_price','category_id','Product_description','Quantity_available','Country_of_origin','Product_image','Product_image_2']
+
+
+class SecondStepVerificationForm(forms.Form):
+    OTP = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control"
+            }
+        )
+    )

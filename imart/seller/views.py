@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
-from .forms import LoginForm, SignUpForm, ProductForm
+from .forms import LoginForm, SignUpForm, ProductForm, SecondStepVerificationForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from core.models import profile, products
+from core.scripts import sent_OTP, checkOTP
 
 def login_view(request):
     data = {'blocksidebar': True,
@@ -20,10 +21,9 @@ def login_view(request):
                 username = request.POST.get('username')
                 password = request.POST.get('password')
                 user = authenticate(username=username, password=password) 
-                if(user is not None and user.is_seller and user.is_active):         
-                    login(request, user)
-                    data = {'blocksidebar' : True}
-                    return redirect('/seller/Sellerhome/', data = data)
+                if(user is not None and user.is_seller and user.is_active): 
+                    sent_OTP(user.email) 
+                    return redirect('seller_otp_verification', user.email)        
                 else:
                     messages.error(request,'Username or Password not Correct')
                     return redirect('/seller/',data=data)
@@ -37,6 +37,30 @@ def login_view(request):
             data['form'] = form
             return render(request, 'seller/login.html', data)
 
+def OTP_verification(request,email):
+    if request.method == 'POST':
+        form = SecondStepVerificationForm(request.POST)
+        if form.is_valid():
+            user = checkOTP(request.POST.get('OTP'), email)
+            if user==False:
+                data = {'blocksidebar': True,
+                        'blockfooter': True,
+                        'blocknavbar': True,
+                        'form': form, 
+                        'error_box': True,
+                        'error': 'Invalid OTP'}
+                return render(request, 'seller/verification.html', data)                
+            else:                
+                login(request, user)
+                return redirect('/seller/Sellerhome/')
+                
+    else:
+        data = {'blocksidebar': True,
+                'blockfooter': True,
+                'blocknavbar': True,
+                'form': SecondStepVerificationForm()}
+        return render(request, 'core/verification.html', data)
+
 def signup_view(request):
         data = {'blocksidebar': True,
                 'blockfooter': True,
@@ -48,8 +72,6 @@ def signup_view(request):
                         instance = form.save(commit=False)
                         instance.is_seller = True
                         instance.is_active=False
-                        print(form)
-                        print(instance)
                         instance.save()
                         data = {'blocksidebar' : True}
                         return redirect('/seller/', data = data)
