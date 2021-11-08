@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, widgets
 from core.models import profile,product_category,products
 from django.contrib.auth.forms import UserCreationForm
 
@@ -21,6 +21,8 @@ class LoginForm(forms.Form):
 
 
 class SignUpForm(UserCreationForm):
+    first_name=forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}))
+    last_name=forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}))
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={
@@ -54,7 +56,7 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = profile
-        fields = ('username', 'email', 'password1', 'password2', 'is_seller','file')
+        fields = ('first_name','last_name','username', 'email', 'password1', 'password2', 'is_seller','file')
 
 class ProductForm(ModelForm):
     class Meta:
