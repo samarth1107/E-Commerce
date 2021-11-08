@@ -51,6 +51,7 @@ def home(request):
         'blocksidebar': True,
         'blockfooter': True,
         'blocknavbar': True,
+        'Name': request.user.username
         }
 
     return render(request, 'seller_admin/home.html',approval_data)
@@ -65,6 +66,7 @@ def seller_view(request):
         'blockfooter': True,
         'blocknavbar': True,
         "Approved":data2,
+        'Name': request.user.username
         }
 
     return render(request, 'seller_admin/seller.html',approval_data)
@@ -78,7 +80,8 @@ def buyer_view(request):
         'blocksidebar': True,
         'blockfooter': True,
         'blocknavbar': True,
-        "buyers":data3
+        "buyers":data3,
+        'Name': request.user.username
         }
     return render(request, 'seller_admin/buyer.html',approval_data)
 
