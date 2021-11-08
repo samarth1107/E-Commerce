@@ -28,6 +28,8 @@
                 <small>₹{{ elements.Selling_price }}</small>₹{{ elements.Product_mrp }}
             </div>
         </div>
+        <div class="product-quantity"><small>Quantity: {{elements.Quantity_available}}</small></div>
+        <div class="product-country"><small>{{elements.Country_of_origin}}</small></div>
         <div class="col-12">
             <a href="{% url 'Selleredit_product' elements.Product_id %}" class="btn btn-primary w-30"> Edit</a>
             <a href="{% url 'Sellerdelete_product' elements.Product_id %}" class="btn btn-danger w-30"> Delete</a>
