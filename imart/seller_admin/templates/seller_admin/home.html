@@ -17,7 +17,11 @@
     <div class="profile-card">
     <!-- <div class="badge">Hot</div> -->
         <div class="profile-tumb">
-            <embed src="{{ elements.file.url }}" width=300 height=250 alt="">
+            <object data="{{elements.file.url}}" type="application/pdf" width="30%" height="300px"> 
+                <p>It appears you don't have a PDF plugin for this browser.
+                 No biggie... you can <a href="{{elements.file.url}}">click here to
+                download the PDF file.</a></p>  
+              </object>
         </div>
 
         <div class="profile-details">
