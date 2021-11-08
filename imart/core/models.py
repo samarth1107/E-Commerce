@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
-from .scripts import file_size
-from django.core.validators import FileExtensionValidator
 
 
 AbstractUser._meta.get_field('email')._unique = True
@@ -21,7 +19,7 @@ class profile(AbstractUser):
     zip_code = models.IntegerField("zip code", validators=[MinValueValidator(100000), MaxValueValidator(999999)], blank=False, default=100000)
     #---Address fields ends---
 
-    file = models.FileField(upload_to="image/approval", null=True, blank=True,validators=[file_size,FileExtensionValidator(allowed_extensions=['pdf'])])
+    file = models.FileField(upload_to="image/approval", null=True, blank=True)
     is_admin= models.BooleanField('Is admin', default=False)
     is_customer = models.BooleanField('Is customer', default=False)
     is_seller = models.BooleanField('Is seller', default=False)

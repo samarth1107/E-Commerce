@@ -7,7 +7,6 @@ from django.template.loader import render_to_string
 from .OTP import account_activation_token, OTPs
 from django.core.mail import EmailMessage, message
 from cryptography.fernet import Fernet
-from django.core.exceptions import ValidationError 
 
 def all_products():
     return products.objects.all()
@@ -71,9 +70,3 @@ def total_cart_items(request):
     for item in Cart.objects.filter(user=request.user):
         total_items += item.quantity
     return total_items
-
-
-def file_size(value): # add this to some file where you can import it from
-    limit = 3 * 1024 * 1024
-    if value.size > limit:
-        raise ValidationError('File too large. Size should not exceed 3 MiB.')
