@@ -41,21 +41,58 @@
                             <th scope="col"><h4>Price</h4></th>
                             <th scope="col"><h4>Quantity</h4></th>
                             <th scope="col"><h4>Description</h4></th>
+                            <th scope="col"><h5>Add or delete item</h5></th>                            
                             </tr>
                         </thead>
-                        <tbody>
-                            {% for product in products %}
-                                <tr>
-                                    <th scope="row"><img src="{{ product.product.Product_image.url }}" alt="" class="rounded-circle"></th>
-                                    <td><h4>{{ product.product.Brand }}</h4></td>
-                                    <td><h4>{{ product.product.Product_title }}</h4></td>
-                                    <td><h5>₹<strike>{{ product.product.Product_mrp }}</strike></h5></td>
-                                    <td><h4>₹{{ product.product.Selling_price }}</h4></td>
-                                    <td><h4>{{ product.quantity }}</h4></td>
-                                    <td><h4>{{ product.product.Product_description }}</h4></td>
-                                </tr>
-                            {% endfor %}
+                        <tbody>                            
+                                {% if is_invalid_products %}
+                                    {% for product in invalid_products %}
+                                        <tr style="background-color: rgb(255, 161, 180);">
+                                            <th scope="row"><img src="{{ product.product.Product_image.url }}" alt="" class="rounded-circle"></th>
+                                            <td><h4>{{ product.product.Brand }}</h4></td>
+                                            <td><h4>{{ product.product.Product_title }}</h4></td>
+                                            <td><h5>₹<strike>{{ product.product.Product_mrp }}</strike></h5></td>
+                                            <td><h4>₹{{ product.product.Selling_price }}</h4></td>
+                                            <td><h4>{{ product.quantity }}</h4></td>
+                                            <td><h4>{{ product.product.Product_description }}</h4></td>                                            
+                                            <td>
+                                                <ul class="list-inline m-0">
+                                                <li class="list-inline-item">
+                                                    <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-table"></i></button>
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+                                                </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
 
+                                    {% for product in valid_products %}
+                                        <tr>
+                                            <th scope="row"><img src="{{ product.product.Product_image.url }}" alt="" class="rounded-circle"></th>
+                                            <td><h4>{{ product.product.Brand }}</h4></td>
+                                            <td><h4>{{ product.product.Product_title }}</h4></td>
+                                            <td><h5>₹<strike>{{ product.product.Product_mrp }}</strike></h5></td>
+                                            <td><h4>₹{{ product.product.Selling_price }}</h4></td>
+                                            <td><h4>{{ product.quantity }}</h4></td>
+                                            <td><h4>{{ product.product.Product_description }}</h4></td>                                            
+                                            <td>
+                                                <ul class="list-inline m-0">
+                                                <li class="list-inline-item">
+                                                    <h4><a class="text-center" href="{% url 'buyer_add_to_cart' product.product.Product_id %}"><i class="fa fa-cart-plus"></i></a></h4>
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    <h4><a class="text-center" href="{% url 'buyer_delete_from_cart' product.product.Product_id %}"><i class="fa fa-trash"></i></a></h4>
+                                                </li>
+                                                </ul>
+                                            </td>
+                                        </tr>         
+                                    {% endfor %}
                         </tbody>
 
 
@@ -71,16 +108,22 @@
                     </div>
                     <div class="col-lg-4"></div>
                     <div class="col-lg-4">
-                        <form action="{% url 'buyer_checkout' %}" method="post">
-                            {% csrf_token %}
-                            <script src="https://checkout.stripe.com/checkout.js" 
-                                class="stripe-button w-100" 
-                                data-key="{{ key }}"
-                                data-description="Charge for shopping on iMart"
-                                data-amount="{{ total_price }}"
-                                data-locale="auto">
-                            </script>
-                        </form>      
+                        {% if is_invalid_products %}
+                            <a href="#" class="btn btn-primary">Delete extra items from cart</a>     
+                        {% elif add_item %}                   
+                            <a href="#" class="btn btn-primary">Your cart is empty</a>       
+                        {% else %}
+                            <form action="{% url 'buyer_checkout' %}" method="post">
+                                {% csrf_token %}
+                                <script src="https://checkout.stripe.com/checkout.js" 
+                                    class="stripe-button w-100" 
+                                    data-key="{{ key }}"
+                                    data-description="Charge for shopping on iMart"
+                                    data-amount="{{ total_price }}"
+                                    data-locale="auto">
+                                </script>
+                            </form>    
+                        {% endif %}  
                     </div>
                 </div>
 

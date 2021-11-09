@@ -8,9 +8,9 @@
 
         <ul class="sidebar-nav" id="sidebar-nav">
             <li class="nav-item">
-                <a class="nav-link collapsed" href="">
+                <a class="nav-link collapsed" href="{% url 'browse_product' 0 %}">
                 <i class="bi bi-grid"></i>
-                <span>Dashboard</span>
+                <span>All products</span>
                 </a>
             </li>
 
@@ -21,13 +21,9 @@
                 <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     {% for elements in category %}
                         <li>
-                            <a href="">                                                        
+                            <a href="{% url 'browse_product' elements.Category_id %}">                                                        
                             <i class="bi bi-circle"></i><span>{{ elements.Name }}</span>
                             </a>
-                                <!-- <form class="search-form d-flex align-items-center">
-                                    <input type="text" name="category">
-                                    <button type="submit" title="Search"><i class="bi bi-search"></i><span>{{ elements.Name }}</span></button>
-                                </form> -->
                         </li>
                     {% endfor %}
                 </ul>
@@ -61,12 +57,12 @@
                 <div class="product-details">
                     
                     <span class="product-catagory">{{ elements.Brand }}</span>
-                    <h4><a href="">{{ elements.Product_title }}</a></h4>
+                    <h4><a href="{% url 'buyer_product' elements.Product_id %}">{{ elements.Product_title }}</a></h4>
                     <p>{{ elements.Product_description }}</p>
 
                     <div class="product-bottom-details">
                         <div class="product-price">
-                            <small>₹{{ elements.Selling_price }}</small>₹{{ elements.Product_mrp }}
+                            <small>₹{{ elements.Product_mrp }}</small>₹{{ elements.Selling_price }}
                         </div>
                         <div class="product-links">
                             <a href="{% url 'buyer_add_to_cart' elements.Product_id %}" aria-label="cart"><i class="fas fa-shopping-cart"></i></a>

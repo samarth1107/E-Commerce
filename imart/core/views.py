@@ -4,11 +4,13 @@ from .forms import *
 
 from django.conf import settings
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
 
 import stripe 
 from .OTP import account_activation_token
@@ -22,52 +24,121 @@ def home(request):
         data = {'blocksidebar' : True,
                 'cart_item_no': total_cart_items(request),
                 'cart_item': cart_items(request)}
-        return render(request, 'core/index.html', data)
+        
     else:
         data = {'blocksidebar': True}
-        return render(request, 'core/index.html', data)
+    data['sale'], data['revenue'], data['customer'] = total_stats()
+    return render(request, 'core/index.html', data)
 
-def browse_product(request):
-    
+def browse_product(request, category='0'):    
     if 'query' in request.GET:
         search_text = request.GET['query']
         product = search_product(search_text)
+    elif category!='0':
+        product = all_products_category(category)
     else:
         product = all_products()
     
-    data = {'product': product, 
-            'category': all_category(),
-            'searchbar': True}
+    if request.user.is_authenticated:
+        data = {'product': product, 
+                'category': all_category(),
+                'searchbar': True,
+                'cart_item_no': total_cart_items(request),
+                'cart_item': cart_items(request)}
+    else:
+        data = {'product': product, 
+                'category': all_category(),
+                'searchbar': True}
     
     return render(request, 'core/browse_product.html', data)
 
-@login_required
-def add_to_cart(request, product_id):
-        product = products.objects.get(Product_id__icontains=product_id)
-        cart_item = Cart.objects.filter(user=request.user, product=product)
-        if cart_item.count() > 0:
-                cart_item = cart_item.first()
-                cart_item.quantity += 1
-                cart_item.save()
-        else:
-                cart_item = Cart(
-                        user=request.user,
-                        product=product,
-                        quantity=1
-                )
-                cart_item.save()
-        return redirect('browse_product')
+def product_page(request, product_id):
+    product = get_product(product_id)
+    if request.user.is_authenticated:
+        data = {'product': product,
+                'blocksidebar': True,
+                'cart_item_no': total_cart_items(request),
+                'cart_item': cart_items(request)}
+    else:
+        data = {'product': product,
+                'blocksidebar': True}
+    return render(request, 'core/product_page.html', data)
 
-@login_required
-def checkout_page(request):
+@login_required(login_url="/login/")
+def change_password(request):
+    data = {'blocksidebar': True}
     
     if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!            
+            data['error_box']=True
+            data['error']="Your password is now changed"
+            return render(request, 'core/user_profile.html', data)
+        else:
+            data['error_box'] = True
+            data['error'] = "Invalid request"
+            data['form'] = form
+            return render(request, 'core/change_password.html', data)
+    else:
+        form = PasswordChangeForm(request.user)
+    data['form']=form
+    return render(request, 'core/change_password.html',data)
+
+@login_required(login_url="/login/")
+def add_to_cart(request, product_id):
+    product = products.objects.get(Product_id__icontains=product_id)
+    if product.Quantity_available<=0:
+        messages.error(request, 'Product is out of stock')
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    cart_item = Cart.objects.filter(user=request.user, product=product, is_active=True)
+    if cart_item.count() > 0:
+            cart_item = cart_item.first()
+            if cart_item.quantity < product.Quantity_available:
+                cart_item.quantity += 1
+                cart_item.save()
+                messages.success(request, product.Product_title+" added to cart")
+                return redirect(request.META.get('HTTP_REFERER'))
+            else:
+                messages.warning(request, product.Product_title+" is out of stock")
+                return redirect(request.META.get('HTTP_REFERER'))
+    else:
+            cart_item = Cart(
+                    user=request.user,
+                    product=product,
+                    quantity=1
+            )
+            cart_item.save()  
+            messages.success(request, product.Product_title+" added to cart")
+    return redirect(request.META.get('HTTP_REFERER'))
+
+@login_required(login_url="/login/")
+def delete_cart_item(request, product_id):
+    product = products.objects.get(Product_id__icontains=product_id)
+    cart_item = Cart.objects.filter(user=request.user, product=product, is_active=True).first()
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.save()
+    else:
+        cart_item.quantity -= 1
+        cart_item.save()
+        cart_item.delete()
+    messages.success(request, product.Product_title+" removed from cart")
+    return redirect(request.META.get('HTTP_REFERER'))
+
+@login_required(login_url="/login/")
+def checkout_page(request):    
+    if request.method == 'POST':
+        clear_cart(request, request.POST['stripeToken'])
         charge = stripe.Charge.create(
             amount=500,
             currency='INR',
             description='A Django charge',
             source=request.POST['stripeToken']
         )
+        messages.success(request, "Your order has been placed")
         return redirect('/')
     else:
         if request.user.address_1 == "":
@@ -79,26 +150,53 @@ def checkout_page(request):
                     'error': "Please add your address first then make order"}    
             return render(request, 'core/user_profile.html', data)
             
-        products = cart_items(request) 
+        products = cart_items(request)
+        valid_items, invalid_items = valid_cart_items(products)
 
         total_price = 0
         for items in products.all():
             total_price += items.product.Selling_price * items.quantity
         total_price = total_price*100
 
-        data = {'blocksidebar': True,
-                'blockfooter': True,
-                'cart_item_no': total_cart_items(request),
-                'cart_item': products,
-                'products': products,
-                'real_price': total_price/100,
-                'quantity': total_cart_items(request),
-                'total_price': total_price,
-                'key': settings.STRIPE_PUBLISHABLE_KEY}
+        if total_price==0:
+            data = {'blocksidebar': True,
+                    'blockfooter': True,
+                    'cart_item_no': 0,
+                    'cart_item': products,
+                    'valid_products': valid_items,
+                    'is_invalid_products': False,
+                    'real_price': 0,
+                    'quantity': 0,
+                    'total_price': 0,
+                    'add_item': True}
+                
+
+        elif invalid_items.count()>0:
+            data = {'blocksidebar': True,
+                    'blockfooter': True,
+                    'cart_item_no': total_cart_items(request),
+                    'cart_item': products,
+                    'valid_products': valid_items,
+                    'invalid_products': invalid_items,
+                    'is_invalid_products': True,
+                    'real_price': total_price/100,
+                    'quantity': total_cart_items(request),
+                    'total_price': total_price}
+        else:
+            data = {'blocksidebar': True,
+                    'blockfooter': True,
+                    'cart_item_no': total_cart_items(request),
+                    'cart_item': products,
+                    'valid_products': valid_items,
+                    'is_invalid_products': False,
+                    'real_price': total_price/100,
+                    'quantity': total_cart_items(request),
+                    'total_price': total_price,
+                    'key': settings.STRIPE_PUBLISHABLE_KEY}
 
         return render(request, 'core/checkout.html', data)
 
-@login_required
+@login_required(login_url="/login/")
 def charge(request):
     if request.method == 'POST':
         charge = stripe.Charge.create(
@@ -138,7 +236,7 @@ def signup_view(request):
             data['form'] = form
             return render(request, 'core/signup.html', data)
 
-@login_required
+@login_required(login_url="/login/")
 def email_verification(request):
     data = {'blocksidebar': True,
             'blockfooter': True,
@@ -216,16 +314,19 @@ def OTP_verification(request, email):
                 'form': SecondStepVerificationForm()}
         return render(request, 'core/verification.html', data)
 
-@login_required
+@login_required(login_url="/login/")
 def logout_view(request):
     logout(request)
     return redirect('/')
 
-@login_required
+@login_required(login_url="/login/")
 def user_profile(request):
     data = {'blocksidebar': True,
             'cart_item_no': total_cart_items(request),
-            'cart_item': cart_items(request)}     
+            'cart_item': cart_items(request),
+            'order_history': order_history(request)}     
+
+    print(data['order_history'])
     if request.method == 'POST':
         form = ProfileForm(request.POST)
         if form.is_valid():

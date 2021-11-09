@@ -99,6 +99,7 @@ class Cart(models.Model):
     quantity = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     is_paid = models.BooleanField(default=False)
+    stripe_id = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         verbose_name = 'cart'
