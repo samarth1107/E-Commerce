@@ -284,6 +284,8 @@ def login_view(request):
                         return render(request, 'core/login.html', data)
                 else:
                     data['form'] = form
+                    data['error_box'] = True
+                    data['error'] = "Invalid captcha"
                     return render(request, 'core/login.html', data)
         else:
                 form = LoginForm()
@@ -326,7 +328,6 @@ def user_profile(request):
             'cart_item': cart_items(request),
             'order_history': order_history(request)}     
 
-    print(data['order_history'])
     if request.method == 'POST':
         form = ProfileForm(request.POST)
         if form.is_valid():

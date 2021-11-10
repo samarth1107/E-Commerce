@@ -9,10 +9,10 @@ from core.scripts import sent_OTP, checkOTP
 
 def login_view(request):
     data = {'blocksidebar': True,
-                'blockfooter': True,
-                'blocknavbar': True}
+            'blockfooter': True,
+            'blocknavbar': True}
 
-    if(request.user.is_authenticated and request.user.is_admin):
+    if(request.user.is_authenticated and request.user.is_seller):
         return redirect("/seller/Sellerhome/")
 
     if request.method == 'POST':
@@ -28,9 +28,8 @@ def login_view(request):
                     messages.error(request,'Username or Password not Correct')
                     return redirect('/seller/',data=data)
             else:
-                print("Form is invalid")
-                print(request.POST)
                 data['form'] = form
+                messages.error(request, "Invalid captcha")
                 return render(request, 'seller/login.html', data)
     else:
             form = LoginForm()
@@ -82,26 +81,6 @@ def signup_view(request):
                 form = SignUpForm()
                 data['form'] = form
                 return render(request, 'seller/signup.html', data)
-@login_required(login_url="/seller/")
-def sellerProfile(request):
-    if(request.user.is_seller==False):
-        return redirect("/seller/")
-        
-    data = {'blocksidebar': True,
-            'blockfooter': True,
-            'blocknavbar': True}
-    prof=profile.objects.get(username=request.user.username)
-    data['profile']=prof
-    if request.method=='POST':
-        form=ProfileForm(request.POST, instance=prof)
-        if form.is_valid():
-            form.save()
-            return redirect('/seller/Sellerhome/')
-    else:
-        form = ProfileForm(instance=prof)
-    data['form']=form
-    return render(request, 'seller/profile.html',data )
-
 
 @login_required(login_url="/seller/")
 def home(request):
@@ -109,13 +88,11 @@ def home(request):
         return redirect("/seller/")
     data=products.objects.filter(username=request.user)
     listing_data={
-        'products':data,
-        'blocksidebar': True,
-        'blockfooter': True,
-        'blocknavbar': True,
+            'products':data,
+            'blocksidebar': True,
+            'blockfooter': True,
         }
     return render(request, 'seller/listing.html',listing_data)
-    #return render(request, 'seller/home.html')
 
 @login_required(login_url="/seller/")
 def logout_view(request):
@@ -154,8 +131,7 @@ def add_product(request):
     if(request.user.is_seller==False):
         return redirect("/seller/")
     data = {'blocksidebar': True,
-            'blockfooter': True,
-            'blocknavbar': True}
+            'blockfooter': True}
     if request.method=='POST':
         form=ProductForm(request.POST,request.FILES)
         if form.is_valid():
@@ -176,8 +152,7 @@ def edit_product(request, pk):
     if(request.user.is_seller==False):
         return redirect("/seller/")
     data = {'blocksidebar': True,
-            'blockfooter': True,
-            'blocknavbar': True}
+            'blockfooter': True}
     data1=products.objects.filter(username=request.user)
     product=data1.get(pk=pk)
     data['product']=product
@@ -195,7 +170,6 @@ def edit_product(request, pk):
 def delete_product(request, pk):
     if(request.user.is_seller==False):
         return redirect("/seller/")
-    #prod=products.objects.get(pk=pk)
     data=products.objects.filter(username=request.user)
     prod=data.get(pk=pk)
     prod.delete()

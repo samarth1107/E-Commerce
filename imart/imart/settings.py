@@ -26,7 +26,7 @@ PROJECT_DIR = Path(__file__).parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',    
+    'django.contrib.staticfiles', 
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -123,7 +124,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATIC_ROOT= os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
@@ -159,7 +159,9 @@ PRIVATE_KEY = config('PRIVATE_KEY')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-
+CAPTCHA_IMAGE_SIZE=[150,50]
+CAPTCHA_FONT_SIZE=30
+CAPTCHA_OUTPUT_FORMAT = u'<br>%(image)s%(hidden_field)s%(text_field)s'
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',

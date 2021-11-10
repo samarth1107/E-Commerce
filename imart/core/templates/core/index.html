@@ -14,7 +14,7 @@
                         <h1><span>iMart</span> security focused shopping website</h1>
                         <h2>iMart is made by group 3</h2>
                         <div class="text-left">
-                            <a href="/browse_products/0/" class="btn-get-started scrollto">Browse producsts</a>
+                            <a href="/browse_products/0/" class="btn-get-started scrollto">Browse products</a>
                         </div>
                     </div>
                 </div>
@@ -115,7 +115,43 @@
         </div>
     </section>
 
-    <!-- link section section -->
+    <!-- Customer section section -->
+    <section id="pricing" class="pricing">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="container"> 
+            
+                    <div class="row" data-aos="fade-left">
+            
+                        <div class="col-lg-3 col-md-6">              
+                        </div>
+            
+                        <div class="col-lg-6 col-md-6 mt-4 mt-md-0">
+                            <div class="box featured" data-aos="zoom-in" data-aos-delay="200">
+                                <h3>For Customers/Buyers</h3>
+                                <ul>
+                                    <li><a href="{% url 'buyer_signup' %}" class="btn-buy">Register as buyer</a></li>
+                                    <li><a href="/browse_products/0/" class="btn-buy">Browse Product</a></li>
+                                    <li><a href="{% url 'buyer_password' %}" class="btn-buy">Change password</a></li>
+                                    <li><a href="{% url 'buyer_user_profile' %}" class="btn-buy">Order history</a></li>
+                                </ul>
+                                <div class="btn-wrap">
+                                    <a href="{% url 'buyer_login' %}" class="btn-buy">Login</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mt-4 mt-lg-0">
+                        </div>
+            
+                    </div>
+
+                </div>
+            </div>  
+        </div>
+        <br>
+        <br>
+    </section>
 
     <!-- about section -->
     <section class="section dashboard">
@@ -175,9 +211,56 @@
         </div>
     </section>
 
+    <!-- ======= Link sections ======= -->
+    <section id="pricing" class="pricing">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="container">
+
+                    <div class="row" data-aos="fade-left">
+            
+                        <div class="col-lg-3 col-md-6">
+                        </div>
+            
+                        <div class="col-lg-3 col-md-6 mt-4 mt-md-0">
+                        <div class="box featured" data-aos="zoom-in" data-aos-delay="200">
+                            <h3>For seller/shops</h3>
+                            <ul>
+                                <li><a href="{% url 'Sellerhome' %}" class="btn-buy">Show product listing</a></li>
+                                <li><a href="{% url 'Selleradd_product' %}" class="btn-buy">Add new product</a></li>
+                                <li><a href="{% url 'signup' %}" class="btn-buy">Register as seller</a></li>                                                               
+                            </ul>
+                            <div class="btn-wrap">
+                                <a href="{% url 'login' %}" class="btn-buy">Login</a>
+                            </div>
+                        </div>
+                        </div>
+            
+                        <div class="col-lg-3 col-md-6 mt-4 mt-lg-0">
+                        <div class="box" data-aos="zoom-in" data-aos-delay="300">
+                            <h3>For admins</h3>                            
+                            <ul>
+                                <li><a href="{% url 'sellerAdminlogin' %}" class="btn-buy">Sign in</a></li>
+                                <li><a href="{% url 'sellerAdminseller' %}" class="btn-buy">View Products</a></li>   
+                            </ul>
+                            <div class="btn-wrap">
+                                <a href="{% url 'sellerAdminlogin' %}" class="btn-buy">Login</a>
+                            </div>
+                        </div>
+                        </div>
+            
+                    </div>
+
+                </div>
+            </div>  
+        </div>
+        <br>
+        <br>
+    </section>
+
     <!-- contact details section -->
     <section class="section contact">
-        <div class="row gy-4">  
+        <div class="row">  
           <div class="col-xl-12">  
             <div class="row">
               <div class="col-lg-3">
@@ -212,78 +295,6 @@
   
           </div>
         </div>
-    </section>
-
-    <!-- ======= Link sections ======= -->
-    <section id="pricing" class="pricing">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="container">
-  
-            
-                    <div class="row" data-aos="fade-left">
-            
-                        <div class="col-lg-3 col-md-6">              
-                        </div>
-            
-                        <div class="col-lg-6 col-md-6 mt-4 mt-md-0">
-                        <div class="box featured" data-aos="zoom-in" data-aos-delay="200">
-                            <h3>For Customers/Buyers</h3>
-                            <ul>
-                                <li><a href="{% url 'buyer_signup' %}" class="btn-buy">Register as buyer</a></li>
-                                <li><a href="/browse_products/0/" class="btn-buy">Browse Product</a></li>
-                                <li><a href="{% url 'buyer_password' %}" class="btn-buy">Change password</a></li>
-                                <li><a href="{% url 'buyer_user_profile' %}" class="btn-buy">Order history</a></li>
-                            </ul>
-                            <div class="btn-wrap">
-                                <a href="{% url 'buyer_login' %}" class="btn-buy">Login</a>
-                            </div>
-                        </div>
-                        </div>
-            
-            
-                    </div>
-
-                    <br>
-                    <br>
-
-                    <div class="row" data-aos="fade-left">
-            
-                        <div class="col-lg-3 col-md-6">
-                        </div>
-            
-                        <div class="col-lg-3 col-md-6 mt-4 mt-md-0">
-                        <div class="box featured" data-aos="zoom-in" data-aos-delay="200">
-                            <h3>For seller/shops</h3>
-                            <ul>
-                                <li><a href="{% url 'login' %}" class="btn-buy">Sign in</a></li>
-                                <li><a href="{% url 'signup' %}" class="btn-buy">Register as seller</a></li>                                                               
-                            </ul>
-                            <div class="btn-wrap">
-                                <a href="{% url 'login' %}" class="btn-buy">Login</a>
-                            </div>
-                        </div>
-                        </div>
-            
-                        <div class="col-lg-3 col-md-6 mt-4 mt-lg-0">
-                        <div class="box" data-aos="zoom-in" data-aos-delay="300">
-                            <h3>For admins</h3>                            
-                            <ul>
-                                <li><a href="{% url 'sellerAdminlogin' %}" class="btn-buy">Sign in</a></li>
-                                <li><a href="{% url 'sellerAdminseller' %}" class="btn-buy">View Products</a></li>   
-                            </ul>
-                            <div class="btn-wrap">
-                                <a href="{% url 'sellerAdminlogin' %}" class="btn-buy">Login</a>
-                            </div>
-                        </div>
-                        </div>
-            
-                    </div>
-
-                </div>
-            </div>  
-        </div>
-    </section>
-  
+    </section>  
 
 {% endblock %}

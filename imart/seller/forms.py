@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm, widgets
 from core.models import profile,product_category,products
 from django.contrib.auth.forms import UserCreationForm
+from captcha.fields import CaptchaField
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -18,6 +19,7 @@ class LoginForm(forms.Form):
             }
         )
     )
+    captcha = CaptchaField()
 
 
 class SignUpForm(UserCreationForm):
@@ -53,6 +55,7 @@ class SignUpForm(UserCreationForm):
     )
 
     file= forms.FileField(widget=forms.FileInput(attrs={"class": "form-control"}))
+    captcha = CaptchaField()
 
     class Meta:
         model = profile

@@ -4,21 +4,49 @@
 {% block title %}Add product | {% endblock %}
 
 {% block content %}
-    <div class="col-12">
-        <a href="{% url 'Sellerlogout' %}" class="btn btn-danger w-30"> Log out</a>
-        <a href="{% url 'Sellerhome' %}" class="btn btn-primary w-30"> Home</a>
-    </div>
-    <h1 class="title">Add product</h1>
+<div class="pagetitle">
+    <h1>Add new product</h1>
+    <nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Home</a></li>            
+        <li class="breadcrumb-item active">Add new product</li>
+    </ol>
+    </nav>
+</div>
+<div class="container">
 
-    <form method="post" action="." enctype="multipart/form-data">
-        {% csrf_token %}
+    <section class="section register d-flex flex-column align-items-center justify-content-center py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-        {{ form.as_p }}
+            <div class="card mb-3">
+                <div class="card-body">
 
-        <div class="field">
-            <div class="control">
-                <button class="button is-dark is-uppercase">Submit</button>
+                    <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Add new product</h5>
+                    <p class="text-center small">Enter details of new products</p>
+                    </div>
+                    <form method="post" action="." enctype="multipart/form-data">
+                        {% csrf_token %}
+                
+                        {{ form.as_p }}
+                
+                        <div class="field">
+                            <div class="control">
+                                <button class="button is-dark is-uppercase">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
             </div>
+
         </div>
-    </form>
+        </div>
+    </div>
+
+    </section>
+
+</div>
 {% endblock %}

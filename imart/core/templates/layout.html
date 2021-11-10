@@ -75,50 +75,52 @@
             {% endif %}
 
             {% if user.is_authenticated %}
-                <!-- Verfification of user -->
-                {% if user.verified %}
-                {% else %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link nav-icon" href="{% url 'buyer_verification' %}">
-                        <i class="bi bi-exclamation-octagon-fill"></i>
-                        <span class="badge bg-danger badge-number">!</span>
-                    </a>
-                </li>
-                {% endif %}
+                {% if user.is_customer %}
+                    <!-- Verfification of user -->
+                    {% if user.verified %}
+                    {% else %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon" href="{% url 'buyer_verification' %}">
+                            <i class="bi bi-exclamation-octagon-fill"></i>
+                            <span class="badge bg-danger badge-number">!</span>
+                        </a>
+                    </li>
+                    {% endif %}
 
-                <!-- Cart Nav -->
-                <li class="nav-item dropdown">
+                    <!-- Cart Nav -->
+                    <li class="nav-item dropdown">
 
-                    <a class="nav-link nav-icon" href="" data-bs-toggle="dropdown">
-                    <i class="bi bi-cart"></i>
-                    <span class="badge bg-success badge-number">{{ cart_item_no }}</span>
-                    </a><!-- End Messages Icon -->
+                        <a class="nav-link nav-icon" href="" data-bs-toggle="dropdown">
+                        <i class="bi bi-cart"></i>
+                        <span class="badge bg-success badge-number">{{ cart_item_no }}</span>
+                        </a><!-- End Messages Icon -->
 
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-                        <li class="dropdown-header">
-                            You have {{ cart_item_no }} items in cart <a href="{% url 'buyer_checkout' %}"><span class="badge rounded-pill bg-primary p-2 ms-2">Checkout</span></a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        {% for item in cart_item %}
-                            <li class="message-item">
-                                <a href="#">
-                                <img src="{{ item.product.Product_image.url }}" alt="" class="rounded-circle">
-                                <div>
-                                    <h4>{{ item.product.Brand }} - {{ item.product.Product_title }}</h4>
-                                    <p>₹{{ item.product.Selling_price }} x {{ item.quantity }}</p>
-                                </div>
-                                </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                            <li class="dropdown-header">
+                                You have {{ cart_item_no }} items in cart <a href="{% url 'buyer_checkout' %}"><span class="badge rounded-pill bg-primary p-2 ms-2">Checkout</span></a>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                        {% endfor %}
-                    </ul><!-- End Messages Dropdown Items -->
 
-                </li>
+                            {% for item in cart_item %}
+                                <li class="message-item">
+                                    <a href="#">
+                                    <img src="{{ item.product.Product_image.url }}" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>{{ item.product.Brand }} - {{ item.product.Product_title }}</h4>
+                                        <p>₹{{ item.product.Selling_price }} x {{ item.quantity }}</p>
+                                    </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            {% endfor %}
+                        </ul><!-- End Messages Dropdown Items -->
+
+                    </li>
+                {% endif %}
 
                 <!-- Profile Nav -->
                 <li class="nav-item dropdown pe-3">                
@@ -156,6 +158,28 @@
                         <hr class="dropdown-divider">
                     </li>
 
+                    {% if user.is_seller %}
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{% url 'Sellerhome' %}">
+                            <i class="bi bi-list-ul"></i>
+                            <span>Product listing</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{% url 'Selleradd_product' %}">
+                            <i class="bi bi-plus-circle"></i>
+                            <span>Add new product</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                    {% endif %}
+
                     <li>
                         <a class="dropdown-item d-flex align-items-center" href="/help/">
                         <i class="bi bi-question-circle"></i>
@@ -164,7 +188,7 @@
                     </li>
                     <li>
                         <hr class="dropdown-divider">
-                    </li>
+                    </li>                    
 
                     <li>
                         <a class="dropdown-item d-flex align-items-center" href="/logout/">

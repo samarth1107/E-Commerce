@@ -1129,17 +1129,17 @@ h1, h2, h3, h4, h5, h6 {
 
 .product-catagory {
   display: block;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 800;
   text-transform: uppercase;
-  color: #ccc;
+  color: #666666;
   margin-bottom: 18px;
 }
 
 .product-details h4 a {
   font-weight: 500;
   display: block;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   text-transform: uppercase;
   color: #363636;
   text-decoration: none;
@@ -1154,7 +1154,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 15px;
   line-height: 22px;
   margin-bottom: 18px;
-  color: #999;
+  color: #666666;
 }
 
 .product-bottom-details {
@@ -1169,7 +1169,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .product-price {
-  font-size: 18px;
+  font-size: 25px;
   color: #fbb72c;
   font-weight: 600;
 }
@@ -1189,7 +1189,7 @@ h1, h2, h3, h4, h5, h6 {
 .product-links a {
   display: inline-block;
   margin-left: 5px;
-  color: #e1e1e1;
+  color: #363636;
   transition: 0.3s;
   font-size: 25px;
 }
