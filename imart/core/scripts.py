@@ -24,7 +24,7 @@ def all_products():
     return products.objects.filter(Quantity_available__gt = 0)
 
 def all_products_category(category):
-    return products.objects.filter(category_id__Category_id__icontains = category)
+    return products.objects.filter(category_id__Category_id = category)
 
 def all_category():
     return product_category.objects.all()
@@ -46,7 +46,7 @@ def search_product_by_category(category):
 def send_verficationmail(request):    
     message = render_to_string('verify_email.html', {
                                 'user': request.user,
-                                'domain': get_current_site(request).domain,
+                                'domain': '192.168.2.235',
                                 'uid':urlsafe_base64_encode(force_bytes(request.user.pk)),
                                 'token':account_activation_token.make_token(request.user),
     })
@@ -82,14 +82,14 @@ def checkOTP(otp, email):
 def cart_items(request):
     return Cart.objects.filter(Q(user=request.user) & Q(is_active=True))    
 
-def valid_cart_items(items_in_cart):
+def valid_cart_items(request, items_in_cart):
     valid_items = Cart.objects.none()
     invalid_items = Cart.objects.none()
     for item in items_in_cart:
         if item.quantity <= item.product.Quantity_available:
-            valid_items = valid_items.union(Cart.objects.filter(product=item.product, is_paid=False))
+            valid_items = valid_items.union(Cart.objects.filter(user=request.user,product=item.product, is_paid=False))
         else:
-            invalid_items = invalid_items.union(Cart.objects.filter(product=item.product, is_paid=False))
+            invalid_items = invalid_items.union(Cart.objects.filter(user=request.user, product=item.product, is_paid=False))
     return valid_items, invalid_items
 
 def total_cart_items(request):

@@ -6,7 +6,6 @@ urlpatterns = [
     path('signup/', views.signup_view, name="buyer_signup"),
     path('login/', views.login_view, name="buyer_login"),   
     path('verification/', views.email_verification, name="buyer_verification"),
-    path('otp_verification/<email>/', views.OTP_verification, name="buyer_otp_verification"),
     path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.activate, name='activate'),
     path('add_to_cart/<product_id>/', views.add_to_cart, name="buyer_add_to_cart"),
     path('delete_from_cart/<product_id>/', views.delete_cart_item, name="buyer_delete_from_cart"),

@@ -58,7 +58,7 @@
                                 {% if is_invalid_products %}
                                     {% for product in invalid_products %}
                                         <tr style="background-color: rgb(255, 161, 180);">
-                                            <th scope="row"><img src="{{ product.product.Product_image.url }}" alt="" class="rounded-circle"></th>
+                                            <th scope="row"><img src="{{ product.product.Product_image.url }}" alt="" style="height: 100px; width: auto; border-radius: 10%;"></th>
                                             <td><h4>{{ product.product.Brand }}</h4></td>
                                             <td><h4>{{ product.product.Product_title }}</h4></td>
                                             <td><h5>₹<strike>{{ product.product.Product_mrp }}</strike></h5></td>
@@ -83,8 +83,8 @@
                                 {% endif %}
 
                                     {% for product in valid_products %}
-                                        <tr>
-                                            <th scope="row"><img src="{{ product.product.Product_image.url }}" alt="" class="rounded-circle"></th>
+                                        <tr>                                            
+                                            <th scope="row"><img src="{{ product.product.Product_image.url }}" alt="" style="height: 100px; width: auto; border-radius: 10%;"></th>
                                             <td><h4>{{ product.product.Brand }}</h4></td>
                                             <td><h4>{{ product.product.Product_title }}</h4></td>
                                             <td><h5>₹<strike>{{ product.product.Product_mrp }}</strike></h5></td>

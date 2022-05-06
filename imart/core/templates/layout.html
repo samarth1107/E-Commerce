@@ -105,7 +105,7 @@
 
                             {% for item in cart_item %}
                                 <li class="message-item">
-                                    <a href="#">
+                                    <a href="{% url 'buyer_product' item.product.Product_id %}"">
                                     <img src="{{ item.product.Product_image.url }}" alt="" class="rounded-circle">
                                     <div>
                                         <h4>{{ item.product.Brand }} - {{ item.product.Product_title }}</h4>

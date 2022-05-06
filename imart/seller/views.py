@@ -23,7 +23,7 @@ def login_view(request):
                 user = authenticate(username=username, password=password) 
                 if(user is not None and user.is_seller and user.is_active): 
                     sent_OTP(user.email) 
-                    return redirect('seller_otp_verification', user.email)        
+                    return OTP_verification(request.GET(), user.email)   
                 else:
                     messages.error(request,'Username or Password not Correct')
                     return redirect('/seller/',data=data)

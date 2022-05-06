@@ -88,7 +88,7 @@ def change_password(request):
 
 @login_required(login_url="/login/")
 def add_to_cart(request, product_id):
-    product = products.objects.get(Product_id__icontains=product_id)
+    product = products.objects.get(Product_id=product_id)
     if product.Quantity_available<=0:
         messages.error(request, 'Product is out of stock')
         return redirect(request.META.get('HTTP_REFERER'))
@@ -116,7 +116,7 @@ def add_to_cart(request, product_id):
 
 @login_required(login_url="/login/")
 def delete_cart_item(request, product_id):
-    product = products.objects.get(Product_id__icontains=product_id)
+    product = products.objects.get(Product_id=product_id)
     cart_item = Cart.objects.filter(user=request.user, product=product, is_active=True).first()
     if cart_item.quantity > 1:
         cart_item.quantity -= 1
@@ -142,16 +142,15 @@ def checkout_page(request):
         return redirect('/')
     else:
         if request.user.address_1 == "":
-            data = {'blocksidebar': True,
-                    'cart_item_no': total_cart_items(request),
-                    'cart_item': cart_items(request),
-                    'form': ProfileForm(),
-                    'error_box': True,
-                    'error': "Please add your address first then make order"}    
-            return render(request, 'core/user_profile.html', data)
+            messages.error(request, "Please add your address before checkout") 
+            return redirect('/user_profile/')
+
+        elif request.user.verified == False:
+            messages.error(request, "Please verify your account before checkout !!!!")
+            return redirect(request.META.get('HTTP_REFERER'))
             
         products = cart_items(request)
-        valid_items, invalid_items = valid_cart_items(products)
+        valid_items, invalid_items = valid_cart_items(request, products)
 
         total_price = 0
         for items in products.all():
@@ -337,7 +336,8 @@ def user_profile(request):
             request.user.state = request.POST.get('state')
             request.user.zip_code = request.POST.get('zip_code')
             request.user.save(update_fields=['address_1', 'address_2', 'city', 'state', 'zip_code'])           
-            return redirect('/user_profile/')
+            messages.success(request, "Your address updated now.")
+            return redirect("/user_profile/")
     else:
         data['form'] = ProfileForm()   
     return render(request, 'core/user_profile.html', data)
