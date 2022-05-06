@@ -20,8 +20,10 @@ A buyer can also purchase a product. To mimic a payment gateway, you can use str
 
 
 2. Sellers
+
 A seller will request the admin for approval of selling. The seller will have to upload a document (can be any pdf) and send it to the admin for approval. 
 Once a seller has approval from the admin, they will be allowed to catalog products, set the inventory, add product details, and so on. 
+
 
 3. Admin 
 
